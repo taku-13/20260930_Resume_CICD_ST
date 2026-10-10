@@ -76,7 +76,6 @@ h1 span { font-size: 32px; font-weight: 400; letter-spacing: 0; color: var(--sub
 .profile-details > div > span { color: var(--subheading); font-size: 15px; }
 .profile-details p { margin-top: 7px; font-size: 16px; }
 .profile-details a { overflow-wrap: anywhere; }
-.birth-date { white-space: nowrap; }
 
 /* 4. 正文平铺：主栏目保留浅底，科研子项目用纯文字、字重和间距分层。 */
 .section { border-top: 1px solid var(--line); padding: 42px 0 46px; }
@@ -129,10 +128,7 @@ h1 span { font-size: 32px; font-weight: 400; letter-spacing: 0; color: var(--sub
 .references strong { font-weight: 600; color: var(--heading); }
 footer { border-top: 1px solid var(--line); padding: 25px 0; }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 25px; }
-.footer-name { font-size: 20px; }
-.footer-name > span { font-size: 17px; margin-left: 8px; color: var(--muted); }
 .footer-inner a { font-size: 16px; }
-.back-top { white-space: nowrap; }
 
 /* 5. 手机只调整布局，所有正文依旧直接可见。 */
 @media (max-width: 1000px) {
@@ -196,7 +192,7 @@ footer { border-top: 1px solid var(--line); padding: 25px 0; }
   .work-card > a:hover, .work-card > a:hover img { transform: none; }
 }
 @media print {
-  .site-header, .skip-link, .back-top { display: none; }
+  .site-header, .skip-link { display: none; }
   .container { width: 100%; }
   .hero { padding-top: 0; }
   .section { padding: 20px 0; }

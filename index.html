@@ -1,356 +1,187 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <meta content="noindex, nofollow" name="robots"/>
-  <meta content="课程练习：个人介绍、技能与作品门户。" name="description"/>
-  <title>
-   我的个人主页
-  </title>
-  <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
-  <!-- CSS 负责颜色、字体、布局；defer 让 JavaScript 在 HTML 解析完成后执行。 -->
-  <link href="styles.css" rel="stylesheet"/>
-   <script src="works-data.js" defer></script>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="个人简历：介绍、技能、经历与作品门户。">
+  <title>我的个人主页</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <!-- 样式表负责全部外观；三个 JS 都是 defer，等 HTML 解析完再执行，不阻塞渲染。
+       分工：works-data.js = 作品数据（改作品只动它） / works-render.js = 渲染作品列表 /
+             app.js = 交互（导航高亮、进度条、返回顶部、淡入） -->
+  <link rel="stylesheet" href="styles.css">
+  <script src="works-data.js" defer></script>
   <script src="works-render.js" defer></script>
   <script src="app.js" defer></script>
- </head>
- <body>
-  <a class="skip-link" href="#main">
-   跳到正文
-  </a>
-  <!-- 第 4 课新增①：顶部阅读进度条，宽度由 JavaScript 控制 -->
-  <div class="reading-progress" id="reading-progress">
-  </div>
-  <header class="site-header">
-   <div class="container header-inner">
-    <a class="brand" href="#about">
-     我的主页
-    </a>
-    <!-- href="#栏目ID" 是原生锚点：即使不加载 JavaScript，也能跳到对应栏目。 -->
+</head>
+<body>
+<!-- ══════════════════════ 运维速查：改内容看这里 ══════════════════════
+  · 姓名 / 身份 / 学校 / 联系方式 → 「首屏 · 个人介绍」区块（搜 ★）
+  · 经历 / 项目 / 技能 / 目标 / 记录 → 对应 <section id="...">，复制现成条目即可增删
+  · 作品卡片 → 只改 works-data.js（加一个对象 = 加一张卡片），本文件不用动
+  · 颜色 / 字体 / 布局 → styles.css（顶部 :root 集中放配色变量）
+  · 每次改完：node tools/check-page.mjs 自检；git push 后 CI 自动检查并发布
+═══════════════════════════════════════════════════════════════════════ -->
+
+<a class="skip-link" href="#main">跳到正文</a>
+<!-- 阅读进度条：宽度由 app.js 按滚动比例设置 -->
+<div class="reading-progress" id="reading-progress"></div>
+
+<!-- ═══════════ 顶部：站名 + 锚点导航（原生跳转，不依赖 JS） ═══════════ -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#about">我的主页</a>
     <nav aria-label="主导航">
-     <a href="#about">
-      关于
-     </a>
-     <a href="#experience">
-      经历
-     </a>
-     <a href="#projects">
-      科研
-     </a>
-     <a href="#skills">
-      技能
-     </a>
-     <a href="#portfolio">
-      作品
-     </a>
-     <a href="#teaching">
-      教学
-     </a>
-     <a href="#publications">
-      成果
-     </a>
+      <!-- 每个链接指向下方对应栏目的 id；栏目文字会被 app.js 用来做高亮提示 -->
+      <a href="#about">关于</a>
+      <a href="#experience">经历</a>
+      <a href="#projects">科研</a>
+      <a href="#skills">技能</a>
+      <a href="#portfolio">作品</a>
+      <a href="#teaching">教学</a>
+      <a href="#publications">成果</a>
     </nav>
-   </div>
-  </header>
-  <main id="main">
-   <!-- HTML 练习：修改姓名、研究方向、照片路径和联系方式。 -->
-   <section class="hero" id="about">
+  </div>
+</header>
+
+<main id="main">
+  <!-- ★ 首屏 · 个人介绍：改个人信息只动这一块 -->
+  <section class="hero" id="about">
     <div class="container">
-     <div class="hero-top">
-      <div class="hero-copy">
-       <h1>
-        林同学
-        <span>
-         Lin
-        </span>
-       </h1>
-       <p class="hero-role">
-        软件技术专业学生 · 前端开发学习者
-       </p>
-       <p class="hero-school">
-        我的学校 · 我的班级
-       </p>
+      <div class="hero-top">
+        <div class="hero-copy">
+          <h1>林同学 <span>Lin</span></h1>
+          <p class="hero-role">软件技术专业学生 · 前端开发学习者</p>
+          <p class="hero-school">我的学校 · 我的班级</p>
+        </div>
+        <div class="hero-visual">
+          <figure>
+            <!-- 换头像：把图片放进 assets/ 后改这里的 src，宽高保持正方形 -->
+            <img src="assets/avatar.svg" alt="个人头像占位图，请替换为自己的图片" width="220" height="220">
+          </figure>
+        </div>
       </div>
-      <div class="hero-visual">
-       <figure>
-        <img alt="个人头像占位图，请替换为自己的图片" height="220" src="assets/avatar.svg" width="220"/>
-       </figure>
+
+      <div class="research-direction" id="research-direction">
+        <span>学习方向</span>
+        <p>HTML5、CSS3、JavaScript，正在学习 Git、数据库与网站部署。</p>
       </div>
-     </div>
-     <div class="research-direction" id="research-direction">
-      <span class="eyebrow">
-       学习方向
-      </span>
-      <p>
-       HTML5、CSS3、JavaScript，正在学习 Git、数据库与网站部署。
-      </p>
-     </div>
-     <div class="profile-details">
-      <div>
-       <span>
-        学习阶段
-       </span>
-       <p>
-        在校学习
-       </p>
+
+      <!-- 四格基本资料：一格 = 一个 <div>，需要更多格就照着复制 -->
+      <div class="profile-details">
+        <div><span>学习阶段</span><p>在校学习</p></div>
+        <div><span>所在城市</span><p>珠海</p></div>
+        <div><span>联系</span><p>15625367995</p></div>
+        <div><span>学校地址</span><p>广东省珠海市红旗镇广东科学技术学院</p></div>
       </div>
-      <div>
-       <span>
-        所在城市
-       </span>
-       <p>
-        珠海
-       </p>
-      </div>
-      <div>
-       <span>
-        联系
-       </span>
-       <p>
-        15625367995
-       </p>
-      </div>
-      <div>
-       <span>
-        学校地址
-       </span>
-       <p>
-        广东省珠海市红旗镇广东科学技术学院
-       </p>
-      </div>
-     </div>
     </div>
-   </section>
-   <!-- 每个栏目复用 section → container → 标题/内容 的结构，统一由 CSS 控制样式。 -->
-   <section class="section" id="experience">
+  </section>
+
+  <!-- ═══════════ 经历：一条经历 = 一个 .experience-item ═══════════ -->
+  <section class="section" id="experience">
     <div class="container">
-     <header class="section-heading">
-      <h2>
-       教育与工作经历
-      </h2>
-     </header>
-     <div class="section-content">
-      <!-- TASK-HTML：复制 experience-item 可增加一条自己的经历。 -->
-      <div class="experience-item">
-       <p class="experience-heading">
-        <strong>
-         我的学校 · 软件技术专业
-        </strong>
-        <time>
-         在读
-        </time>
-       </p>
-       <p class="experience-detail">
-        学习网页开发，用项目记录成长。
-       </p>
+      <header class="section-heading"><h2>教育与工作经历</h2></header>
+      <div class="section-content">
+        <div class="experience-item">
+          <p class="experience-heading">
+            <strong>我的学校 · 软件技术专业</strong>
+            <time>在读</time>
+          </p>
+          <p class="experience-detail">学习网页开发，用项目记录成长。</p>
+        </div>
       </div>
-     </div>
     </div>
-   </section>
-   <section class="section" id="projects">
+  </section>
+
+  <!-- ═══════════ 项目：一个项目 = 一个 .research-item ═══════════ -->
+  <section class="section" id="projects">
     <div class="container">
-     <header class="section-heading">
-      <h2>
-       项目经历
-      </h2>
-     </header>
-     <div class="section-content">
-      <article class="research-item">
-       <h3>
-        <time>
-         课程练习
-        </time>
-        个人主页
-       </h3>
-       <p>
-        项目内容：制作自己的网页，展示资料与作品，记录修改、测试与发布过程。
-       </p>
-      </article>
-     </div>
-    </div>
-   </section>
-   <section class="section" id="skills">
-    <div class="container">
-     <header class="section-heading">
-      <h2>
-       技能与实践
-      </h2>
-     </header>
-     <div class="section-content">
-      <ul class="skills-list">
-       <li>
-        <strong>
-         网页内容
-        </strong>
-        HTML5 结构、图片、链接。
-       </li>
-       <li>
-        <strong>
-         页面样式
-        </strong>
-        CSS3 字体、颜色、响应式布局。
-       </li>
-       <li>
-        <strong>
-         开发过程
-        </strong>
-        JavaScript、Git、检查与部署。
-       </li>
-      </ul>
-     </div>
-    </div>
-   </section>
-   <section class="section" id="portfolio">
-    <div class="container">
-     <header class="section-heading">
-      <h2>
-       作品门户
-      </h2>
-      <p class="works-notice">
-       以下为教学示例，完成后可替换为自己的作品。
-      </p>
-     </header>
-     <!-- 第 5 课新增：筛选与排序工具条。里面的按钮由 JavaScript 生成，
-          不写 JS 时这里是空的，页面照常显示全部作品。 -->
-     <div class="works-toolbar">
-      <div class="works-tags" id="works-tags">
+      <header class="section-heading"><h2>项目经历</h2></header>
+      <div class="section-content">
+        <article class="research-item">
+          <h3><time>课程练习</time>个人主页</h3>
+          <p>项目内容：制作自己的网页，展示资料与作品，记录修改、测试与发布过程。</p>
+        </article>
       </div>
-      <button class="works-sort" id="works-sort" type="button">
-       按年份：新→旧
-      </button>
-     </div>
-     <ol class="portfolio-list">
-      <li class="work-card work-blog">
-       <a href="https://ffd-p2-blog.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="长风成卷 · 博客应用的实际网页截图" decoding="async" height="800" src="assets/work-blog.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          长风成卷 · 博客应用
-         </h3>
-         <p>
-          文章展示、接口与数据库。
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="work-card work-community">
-       <a href="https://ffd-p3-community.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="群像云图 · 社区应用的实际网页截图" decoding="async" height="800" src="assets/work-community.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          群像云图 · 社区应用
-         </h3>
-         <p>
-          内容发布与社区互动。
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="work-card work-greeting-card">
-       <a href="https://ffd-p4-greeting-card.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="一笺心意 · 祝福卡片的实际网页截图" decoding="async" height="800" src="assets/work-greeting-card.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          一笺心意 · 祝福卡片
-         </h3>
-         <p>
-          卡片制作与作品分享。
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="work-card work-music-station">
-       <a href="https://ffd-p5-music-station.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="星声音乐站 · 音乐应用的实际网页截图" decoding="async" height="800" src="assets/work-music-station.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          星声音乐站 · 音乐应用
-         </h3>
-         <p>
-          网页音频与交互实践。
-         </p>
-        </div>
-       </a>
-      </li>
-     </ol>
     </div>
-   </section>
-   <section class="section" id="teaching">
+  </section>
+
+  <!-- ═══════════ 技能：一项技能 = 一个 <li>（前三列布局由 CSS 控制） ═══════════ -->
+  <section class="section" id="skills">
     <div class="container">
-     <header class="section-heading">
-      <h2>
-       学习与实践
-      </h2>
-     </header>
-     <div class="section-content">
-      <div class="teaching-group">
-       <h3>
-        本学期目标
-       </h3>
-       <ol>
-        <li>
-         每次课完成一个可运行的小改动。
-        </li>
-        <li>
-         能解释自己修改的 HTML、CSS 和 JavaScript。
-        </li>
-        <li>
-         使用 Git 记录版本，让作品能被别人访问。
-        </li>
-       </ol>
+      <header class="section-heading"><h2>技能与实践</h2></header>
+      <div class="section-content">
+        <ul class="skills-list">
+          <li><strong>网页内容</strong>HTML5 结构、图片、链接。</li>
+          <li><strong>页面样式</strong>CSS3 字体、颜色、响应式布局。</li>
+          <li><strong>开发过程</strong>JavaScript、Git、检查与部署。</li>
+        </ul>
       </div>
-     </div>
     </div>
-   </section>
-   <section class="section" id="publications">
+  </section>
+
+  <!-- ═══════════ 作品门户：卡片全部由 works-render.js 读取 works-data.js 渲染，
+       本区块不写死任何作品 —— 加/改/删作品请只动 works-data.js ═══════════ -->
+  <section class="section" id="portfolio">
     <div class="container">
-     <header class="section-heading">
-      <h2>
-       学习记录
-      </h2>
-     </header>
-     <div class="section-content">
-      <div class="publication-group">
-       <h3>
-        我的记录
-       </h3>
-       <ol class="references">
-        <li>
-         完成第一张个人主页。
-        </li>
-        <li>
-         后续在这里补充自己的真实成果。
-        </li>
-       </ol>
+      <header class="section-heading">
+        <h2>作品门户</h2>
+        <p class="works-notice">以下为教学示例，完成后可在 works-data.js 中替换为自己的作品。</p>
+      </header>
+      <!-- 工具条：标签按钮和列表内容都由 JS 生成；不启用 JS 时列表为空并提示 -->
+      <div class="works-toolbar">
+        <div class="works-tags" id="works-tags"></div>
+        <button class="works-sort" id="works-sort" type="button">按年份：新→旧</button>
       </div>
-     </div>
+      <ol class="portfolio-list"></ol>
+      <noscript><p class="works-notice">作品列表需要启用 JavaScript 才能显示。</p></noscript>
     </div>
-   </section>
-  </main>
-  <!-- 第 4 课新增：这两块由 JavaScript 控制，不写 JS 时它们不会出现 -->
-  <p aria-live="polite" class="section-indicator" id="section-indicator">
-  </p>
-  <button aria-label="返回页面顶部" class="to-top" id="to-top" type="button">
-   ↑
-  </button>
-  <footer>
-   <div class="container footer-inner">
-    <a href="#about">
-     回到顶部
-    </a>
-    <a href="#portfolio">
-     作品门户
-    </a>
-   </div>
-  </footer>
- </body>
+  </section>
+
+  <!-- ═══════════ 目标：一组目标 = 一个 .teaching-group ═══════════ -->
+  <section class="section" id="teaching">
+    <div class="container">
+      <header class="section-heading"><h2>学习与实践</h2></header>
+      <div class="section-content">
+        <div class="teaching-group">
+          <h3>本学期目标</h3>
+          <ol>
+            <li>每次课完成一个可运行的小改动。</li>
+            <li>能解释自己修改的 HTML、CSS 和 JavaScript。</li>
+            <li>使用 Git 记录版本，让作品能被别人访问。</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 记录：一条记录 = 一个 <li> ═══════════ -->
+  <section class="section" id="publications">
+    <div class="container">
+      <header class="section-heading"><h2>学习记录</h2></header>
+      <div class="section-content">
+        <div class="publication-group">
+          <h3>我的记录</h3>
+          <ol class="references">
+            <li>完成第一张个人主页。</li>
+            <li>后续在这里补充自己的真实成果。</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 这两块由 app.js 控制：不写 JS 时不出现（indicator 默认透明、to-top 默认隐藏） -->
+<p aria-live="polite" class="section-indicator" id="section-indicator"></p>
+<button aria-label="返回页面顶部" class="to-top" id="to-top" type="button">↑</button>
+
+<footer>
+  <div class="container footer-inner">
+    <a href="#about">回到顶部</a>
+    <a href="#portfolio">作品门户</a>
+  </div>
+</footer>
+</body>
 </html>
