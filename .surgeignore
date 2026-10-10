@@ -1,0 +1,11 @@
+# surge 部署时不上传的文件（网站只需要 index.html / styles.css / app.js /
+# works-data.js / works-render.js / assets/，其余都是课程与工程文件）
+课堂资料
+.github
+.git
+.gitignore
+.surgeignore
+course-tools
+course-manifest.json
+tools
+README.md
