@@ -4,3 +4,5 @@ node_modules/
 .env.*
 !.env.example
 .DS_Store
+# surge 在项目根目录生成，仅本机使用；提交会影响 GitHub Pages 的域名配置
+CNAME
